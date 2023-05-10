@@ -98,9 +98,14 @@ function Dashboard() {
     setMissionSearch(e.target.value)
   }
 
-  const filteredMissions = [...missions].filter(mission => mission.name.toLowerCase().includes(missionSearch.toLowerCase()))
+  const missionOptions = ["",...missions.map(miss=> miss.length_in_days)].sort().map(mission => {
+    return (<option value={mission} key={mission ? mission : "blank"}>{mission}</option>)
+})
 
-  const missionLis = filteredMissions.map(mission => <li key={mission.id}>{mission.name}</li>)
+const filteredMissions = [...missions].filter(mission => mission.length_in_days == missionSearch)
+
+  const missionLis = missionSearch == "" ? missions.map(mission => <li key={mission.id}>{mission.name}</li>)
+  : filteredMissions.map(mission => <li key={mission.id}>{mission.name}</li>)
 
   return (
   <>
@@ -133,15 +138,13 @@ function Dashboard() {
       { planetCards }
       <hr/>
       <h1>Missions</h1>
+      <h4>Filter by length in Days!</h4>
       <form>
-      <input
-                    type="text"
-                    id="missionSearch"
-                    placeholder="Search for a Mission"
-                    value={missionSearch}
-                    onChange={handleMissionSearchChange}
-      />
+      <select id="missionSearch" onChange={handleMissionSearchChange}>
+      { missionOptions }
+      </select>
       </form>
+      <br/>
       { missionLis }
       <hr/>
       <h2>Long Missions</h2>
