@@ -8,7 +8,7 @@ class ScientistsController < ApplicationController
     end
 
     def show
-        render json: @scientist, serializer: ScientistPlanetSerializer
+        render json: @scientist, status: :ok
     end
 
     def create
@@ -26,10 +26,14 @@ class ScientistsController < ApplicationController
         head :no_content
     end
 
+    def pluto_specialist
+        render json: Scientist.where("field_of_study = ?", "Pluto Specialist")
+    end
+
     private
 
     def one_scientist
-        @scientist = Scientists.find(params[:id])
+        @scientist = Scientist.find(params[:id])
     end
 
     def scientist_params

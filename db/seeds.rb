@@ -5,29 +5,18 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-puts "Clearing db..."
 Planet.destroy_all
 Scientist.destroy_all
 Mission.destroy_all
 
-Faker::TvShows::StarTrek.unique.clear
-Faker::Space.unique.clear
-Faker::TvShows::Buffy.unique.clear
+p1 = Planet.create(name: "Pluto", distance_from_earth: "2000 km", nearest_star: "Genesis", image: "https://cdn.uanews.arizona.edu/s3fs-public/images/uanow/Pluto_UANow%20thmb.jpg")
+p2 = Planet.create(name: "Saturn", distance_from_earth: "300 km", nearest_star: "Jenna", image: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2F0dXJufGVufDB8fDB8fA%3D%3D&w=1000&q=80")
+p3 = Planet.create(name: "Jupiter", distance_from_earth: "700 km", nearest_star: "Nasca", image: "https://cdn.britannica.com/66/155966-131-17B5B518/Jupiter.jpg")
 
-puts "Making planets..."
-20.times {Planet.create(name: Faker::TvShows::StarTrek.unique.location,
-                        distance_from_earth: Faker::Space.unique.distance_measurement,
-                        nearest_star: Faker::Space.star,
-                        image: "planet#{rand(1..10)}")}
+s1 = Scientist.create(name: "Anita", field_of_study: "Pluto Specialist", avatar: "https://thumbs.dreamstime.com/b/female-avatar-icon-women-clipart-png-vector-girl-avatar-women-clipart-bor-bisiness-icon-png-vector-233362315.jpg")
+s2 = Scientist.create(name: "James", field_of_study: "Pluto Specialist", avatar: "https://img.freepik.com/premium-vector/portrait-young-man-with-beard-hair-style-male-avatar-vector-illustration_266660-423.jpg?w=2000")
+s3 = Scientist.create(name: "Danielle", field_of_study: "Moon Specialist", avatar: "https://thumbs.dreamstime.com/b/female-avatar-profile-picture-vector-female-avatar-profile-picture-vector-102690279.jpg")
 
-puts "Making scientists..."                        
-15.times {Scientist.create(name: Faker::FunnyName.name,
-                        field_of_study: Faker::Educator.subject,
-                        avatar: Faker::Avatar.image(size: "200x200", set: "set3"))}
-
-puts "Making missions..."                           
-20.times {Mission.create(name: Faker::TvShows::Buffy.unique.episode,
-                        scientist_id: Scientist.all.sample, 
-                        planet_id: Planet.all.sample)}
-
-puts "Done seeding!"                         
+m1 = Mission.create(name: "Find the stars", scientist_id: s1.id, planet_id: s2.id, length_in_days: 30)
+m2 = Mission.create(name: "Run in Space", scientist_id: s3.id, planet_id: s1.id, length_in_days: 45)
+m3 = Mission.create(name: "Crater Hater", scientist_id: s2.id, planet_id: s3.id, length_in_days: 20)
