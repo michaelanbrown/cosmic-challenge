@@ -35,7 +35,7 @@ class ScientistsController < ApplicationController
         if scientist.size > 0
             render json: scientist, status: :ok
         else
-            render json: {errors: "No scientist match this field"}, status: :not_found
+            render json: {errors: ["No scientist match this field"]}, status: :not_found
         end
     end
 
