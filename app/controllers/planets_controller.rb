@@ -9,7 +9,11 @@ class PlanetsController < ApplicationController
 
   def planet_search
     planet = Planet.where("name = ?", params[:name])
-    render json: planet, status: :ok
+    if planet.size > 0
+      render json: planet, status: :ok
+    else
+      render json: {errors: ["Planet not found"]}, status: :not_found
+    end
   end
 
 end

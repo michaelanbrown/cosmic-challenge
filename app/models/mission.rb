@@ -4,4 +4,5 @@ class Mission < ApplicationRecord
 
     validates :name, presence: true
     validates :scientist, uniqueness: {scope: :name}
+    validates_numericality_of :length_in_days
 end

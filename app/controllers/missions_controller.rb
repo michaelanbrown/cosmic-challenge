@@ -15,7 +15,11 @@ class MissionsController < ApplicationController
 
     def mission_search
         mission = Mission.where("length_in_days = ?", params[:length_in_days])
-        render json: mission, status: :ok
+        if mission.size > 0
+            render json: mission, status: :ok
+        else
+            render json: {errors: ["Invalid data type, requires number"]}, status: :not_found
+        end
     end
 
     private

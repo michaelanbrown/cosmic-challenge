@@ -15,6 +15,8 @@ function Dashboard() {
   const [missionShow, setMissionShow] = useState(false)
   const [longMissions, setLongMissions] = useState([])
   const [missionSearch, setMissionSearch] = useState("")
+  const [missionErrors, setMissionErrors] = useState([])
+  const [planetErrors, setPlanetErrors] = useState([])
 
   useEffect(() => {
     const fetchScientists = async () => {
@@ -58,6 +60,7 @@ function Dashboard() {
 
   function planetSubmit(e) {
     e.preventDefault();
+    setPlanetErrors([])
     fetch(`/planet_search/${planetSearch}`, {
       method: 'GET',
       headers: {
@@ -67,6 +70,8 @@ function Dashboard() {
     .then(res => {
       if (res.ok) {
         res.json().then(setPlanets)
+      } else {
+        res.json().then(json => setPlanetErrors(json.errors))
       }
     })
   }
@@ -106,13 +111,17 @@ function Dashboard() {
 
   function missionSubmit(e) {
     e.preventDefault();
+    setMissionErrors([])
     fetch(`/mission_search/${missionSearch}`)
     .then(res => {
       if (res.ok) {
         res.json().then(setMissions)
+      } else {
+        res.json().then(json => setMissionErrors(json.errors))
       }
     })
   }
+
 
   const longMissionCards = longMissions?.map(mission => <li key={mission.id}>{mission.name} - {mission.length_in_days} Days</li>)
 
@@ -151,6 +160,7 @@ function Dashboard() {
       />{' '}
       <button>Search!</button>
       </form>
+      {planetErrors ? planetErrors.map(error => <p className="error" key={error}>{error}</p>) : null}
       { planetCards }
       <hr/>
       <h1>Missions</h1>
@@ -167,6 +177,7 @@ function Dashboard() {
       </form>
       <br/>
       { missionLis }
+      {missionErrors ? missionErrors.map(error => <p className="error" key={error}>{error}</p>) : null}
       <hr/>
       <h2>Long Missions</h2>
       <button onClick={longMissionClick}>Long Missions</button>
