@@ -104,16 +104,23 @@ function Dashboard() {
     })
   }
 
+  function missionSubmit(e) {
+    e.preventDefault();
+    fetch(`/mission_search/${missionSearch}`)
+    .then(res => {
+      if (res.ok) {
+        res.json().then(setMissions)
+      }
+    })
+  }
+
   const longMissionCards = longMissions?.map(mission => <li key={mission.id}>{mission.name} - {mission.length_in_days} Days</li>)
 
   function handleMissionSearchChange(e) {
     setMissionSearch(e.target.value)
   }
 
-const filteredMissions = [...missions].filter(mission => mission.length_in_days == missionSearch)
-
-  const missionLis = missionSearch == "" ? missions.map(mission => <li key={mission.id}>{mission.name}</li>)
-  : filteredMissions.map(mission => <li key={mission.id}>{mission.name}</li>)
+  const missionLis = missions.map(mission => <li key={mission.id}>{mission.name}</li>)
 
   return (
   <>
@@ -148,7 +155,7 @@ const filteredMissions = [...missions].filter(mission => mission.length_in_days 
       <hr/>
       <h1>Missions</h1>
       <h4>Filter by length in Days!</h4>
-      <form >
+      <form onSubmit={missionSubmit}>
       <input
                     type="text"
                     name="length_in_days"

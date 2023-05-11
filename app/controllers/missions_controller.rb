@@ -14,7 +14,7 @@ class MissionsController < ApplicationController
     end
 
     def mission_search
-        mission = Mission.where("length_in_days = ", params[:length_in_days])
+        mission = Mission.where("length_in_days = ?", params[:length_in_days])
         render json: mission, status: :ok
     end
 
