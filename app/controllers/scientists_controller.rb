@@ -30,6 +30,15 @@ class ScientistsController < ApplicationController
         render json: Scientist.where("field_of_study = ?", "Pluto Specialist")
     end
 
+    def scientist_search
+        scientist = Scientist.where("field_of_study LIKE ?", "%#{params[:field_of_study]}%")
+        if scientist.size > 0
+            render json: scientist, status: :ok
+        else
+            render json: {errors: "No scientist match this field"}, status: :not_found
+        end
+    end
+
     private
 
     def one_scientist

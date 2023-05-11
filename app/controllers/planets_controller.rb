@@ -8,7 +8,7 @@ class PlanetsController < ApplicationController
   end
 
   def planet_search
-    planet = Planet.where("name = ?", params[:name])
+    planet = Planet.where("name LIKE ?", "%#{params[:name]}%")
     if planet.size > 0
       render json: planet, status: :ok
     else

@@ -17,6 +17,8 @@ function Dashboard() {
   const [missionSearch, setMissionSearch] = useState("")
   const [missionErrors, setMissionErrors] = useState([])
   const [planetErrors, setPlanetErrors] = useState([])
+  const [scientistSearch, setScientistSearch] = useState([])
+  const [scientistErrors, setScientistErrors] = useState([])
 
   useEffect(() => {
     const fetchScientists = async () => {
@@ -56,6 +58,10 @@ function Dashboard() {
 
   function handlePlanetSearchChange(e) {
     setPlanetSearch(e.target.value)
+  }
+
+  function handleScientistSearchChange(e) {
+    setScientistSearch(e.target.value)
   }
 
   function planetSubmit(e) {
@@ -122,6 +128,18 @@ function Dashboard() {
     })
   }
 
+  function scientistSubmit(e) {
+    e.preventDefault();
+    fetch(`/scientist_search/${scientistSearch}`)
+    .then(res => {
+      if (res.ok) {
+        res.json().then(setScientists)
+      } else {
+        res.json().then(json => setScientistErrors(json.errors))
+      }
+    })
+  }
+
 
   const longMissionCards = longMissions?.map(mission => <li key={mission.id}>{mission.name} - {mission.length_in_days} Days</li>)
 
@@ -135,6 +153,16 @@ function Dashboard() {
   <>
       <Suspense fallback={<GridLoader />}>
         <h1>Scientists</h1>
+        <form onSubmit={scientistSubmit}>
+          <input
+          type="text"
+          name="field_of_study"
+          value={scientistSearch}
+          placeholder="Search for a scientist by field"
+          onChange={handleScientistSearchChange}/>{' '}
+          <button>Submit!</button>
+        </form>
+        {scientistErrors ? scientistErrors.map(error => <p className="error" key={error}>{error}</p>) : null}
         <div className="sciList">
           {sciCards}
 

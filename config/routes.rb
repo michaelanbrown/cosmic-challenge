@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/greater_than_30', to: "missions#greater_than_30"
   get '/planet_search/:name', to: "planets#planet_search"
   get '/mission_search/:length_in_days', to: "missions#mission_search"
+  get '/scientist_search/:field_of_study', to: "scientists#scientist_search"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
