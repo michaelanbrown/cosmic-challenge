@@ -13,6 +13,11 @@ class MissionsController < ApplicationController
         render json: Mission.where("length_in_days > ?", 30)
     end
 
+    def mission_search
+        mission = Mission.where("length_in_days = ", params[:length_in_days])
+        render json: mission, status: :ok
+    end
+
     private
     def mission_params
         params.permit(:name, :scientist_id, :planet_id)

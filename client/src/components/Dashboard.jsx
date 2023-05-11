@@ -4,7 +4,6 @@ import ScientistForm from './ScientistForm'
 import GridLoader from 'react-spinners/GridLoader'
 import PlanetCard from './PlanetCard'
 import PlutoSpecialist from './PlutoSpecialist'
-import { redirect } from 'react-router-dom'
 
 function Dashboard() {
 
@@ -57,11 +56,24 @@ function Dashboard() {
     setPlanetSearch(e.target.value)
   }
 
-  const filteredPlanets = [...planets].filter(planet => planet.name.toLowerCase().includes(planetSearch.toLowerCase()))
+  function planetSubmit(e) {
+    e.preventDefault();
+    fetch(`/planet_search/${planetSearch}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }})
+    .then(res => {
+      if (res.ok) {
+        res.json().then(setPlanets)
+      }
+    })
+  }
 
   const sciCards = scientists?.map(sci => <ScientistCard key={sci.id} scientist={sci} onDelete={handleDeleteScientist}/>)
 
-  const planetCards = filteredPlanets.map(planet => <PlanetCard key={planet.id} planet={planet} image={planet.image}/>)
+  const planetCards = planets.map(planet => <PlanetCard key={planet.id} planet={planet} image={planet.image}/>)
 
   function plutoSpecialistClick() {
     fetch('/pluto_specialist')
@@ -98,10 +110,6 @@ function Dashboard() {
     setMissionSearch(e.target.value)
   }
 
-  const missionOptions = ["",...missions.map(miss=> miss.length_in_days)].sort().map(mission => {
-    return (<option value={mission} key={mission ? mission : "blank"}>{mission}</option>)
-})
-
 const filteredMissions = [...missions].filter(mission => mission.length_in_days == missionSearch)
 
   const missionLis = missionSearch == "" ? missions.map(mission => <li key={mission.id}>{mission.name}</li>)
@@ -126,23 +134,29 @@ const filteredMissions = [...missions].filter(mission => mission.length_in_days 
       <ScientistForm onScientistRequest={handleAddScientist} edit={false} />
       <hr/>
       <h1>Planets</h1>
-      <form>
+      <form onSubmit={planetSubmit}>
       <input
                     type="text"
-                    id="planetSearch"
+                    name="name"
                     placeholder="Search for a Planet"
                     value={planetSearch}
                     onChange={handlePlanetSearchChange}
-      />
+      />{' '}
+      <button>Search!</button>
       </form>
       { planetCards }
       <hr/>
       <h1>Missions</h1>
       <h4>Filter by length in Days!</h4>
-      <form>
-      <select id="missionSearch" onChange={handleMissionSearchChange}>
-      { missionOptions }
-      </select>
+      <form >
+      <input
+                    type="text"
+                    name="length_in_days"
+                    placeholder="Search for a Mission by length in days!"
+                    value={missionSearch}
+                    onChange={handleMissionSearchChange}
+      />{' '}
+      <button>Search!</button>
       </form>
       <br/>
       { missionLis }
